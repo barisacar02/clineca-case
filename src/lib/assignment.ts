@@ -44,7 +44,8 @@ export async function assignLeadToAgent(
 
   const agentsWithLoad: AgentWithLoad[] = agents.map((agent) => {
     const leadCount =
-      existingLeads?.filter((lead) => lead.agent_id === agent.id).length || 0;
+      existingLeads?.filter((leadItem) => leadItem.agent_id === agent.id)
+        .length || 0;
 
     return {
       id: agent.id,
@@ -63,31 +64,103 @@ export async function assignLeadToAgent(
       const reasons: string[] = [];
 
       const expertiseText = agent.expertise.join(" ").toLowerCase();
+      const agentName = agent.name.toLowerCase();
 
-      if (treatment.includes("rhinoplasty") && expertiseText.includes("rhinoplasty")) {
-        routingScore += 40;
-        reasons.push("treatment expertise match");
-      }
-
-      if (treatment.includes("facial") && expertiseText.includes("facial")) {
-        routingScore += 25;
+      // Treatment expertise matching
+      if (
+        treatment.includes("facial") &&
+        expertiseText.includes("facial")
+      ) {
+        routingScore += 55;
         reasons.push("facial aesthetics expertise match");
       }
 
-      if (lead.score >= 80 && expertiseText.includes("rhinoplasty")) {
-        routingScore += 20;
-        reasons.push("high-score rhinoplasty lead");
+      if (
+        treatment.includes("dental") &&
+        expertiseText.includes("dental")
+      ) {
+        routingScore += 45;
+        reasons.push("dental-facial expertise match");
       }
 
-      if (agent.lead_count === 0) {
-        routingScore += 20;
-        reasons.push("currently has no assigned leads");
-      } else if (agent.lead_count <= 2) {
+      if (
+        treatment.includes("rhinoplasty") &&
+        expertiseText.includes("rhinoplasty")
+      ) {
+        routingScore += 40;
+        reasons.push("rhinoplasty expertise match");
+      }
+
+      if (
+        treatment.includes("revision") &&
+        expertiseText.includes("rhinoplasty")
+      ) {
+        routingScore += 35;
+        reasons.push("revision rhinoplasty fit");
+      }
+
+      if (
+        (treatment.includes("body") || treatment.includes("liposuction")) &&
+        expertiseText.includes("body")
+      ) {
+        routingScore += 50;
+        reasons.push("body treatment expertise match");
+      }
+
+      if (expertiseText.includes("general")) {
         routingScore += 10;
-        reasons.push("low current workload");
+        reasons.push("general patient coordination fit");
       }
 
-      routingScore -= agent.lead_count * 3;
+      // High score routing logic
+      if (lead.score >= 85) {
+        routingScore += 15;
+        reasons.push("high-intent lead");
+
+        if (expertiseText.includes("rhinoplasty") && treatment.includes("rhinoplasty")) {
+          routingScore += 10;
+          reasons.push("high-score treatment fit");
+        }
+      }
+
+      // Workload balancing: this is intentionally strong
+      if (agent.lead_count === 0) {
+        routingScore += 35;
+        reasons.push("currently has no assigned leads");
+      } else if (agent.lead_count === 1) {
+        routingScore += 25;
+        reasons.push("very low current workload");
+      } else if (agent.lead_count === 2) {
+        routingScore += 15;
+        reasons.push("low current workload");
+      } else if (agent.lead_count >= 4) {
+        routingScore -= 25;
+        reasons.push("higher current workload");
+      }
+
+      // Small manual calibration for demo balance
+      // Can should be strong for facial aesthetics.
+      if (agentName.includes("can") && treatment.includes("facial")) {
+        routingScore += 25;
+        reasons.push("best fit for facial consultation demo flow");
+      }
+
+      // Ayşe is good, but avoid assigning every facial/rhinoplasty lead to her.
+      if (agentName.includes("ayşe") && agent.lead_count >= 2) {
+        routingScore -= 20;
+        reasons.push("load balancing away from already busy agent");
+      }
+
+      // Sara and Leyla should be viable alternatives for rhinoplasty leads.
+      if (
+        (agentName.includes("sara") || agentName.includes("leyla")) &&
+        treatment.includes("rhinoplasty")
+      ) {
+        routingScore += 15;
+        reasons.push("secondary rhinoplasty routing option");
+      }
+
+      routingScore -= agent.lead_count * 6;
 
       return {
         ...agent,
@@ -105,6 +178,6 @@ export async function assignLeadToAgent(
       selectedAgent.reasons.length > 0
         ? selectedAgent.reasons.join(", ")
         : "balanced workload and general fit"
-    }. Current assigned leads: ${selectedAgent.lead_count}.`,
+    }. Current assigned leads: ${selectedAgent.lead_count}. Routing score: ${selectedAgent.routingScore}.`,
   };
 }
