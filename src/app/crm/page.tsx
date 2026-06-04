@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { supabase } from "@/lib/supabase";
 import StageSelect from "@/components/StageSelect";
+import ScoreBadge from "@/components/ScoreBadge";
 
 type CRMLead = {
   id: string;
@@ -109,9 +110,7 @@ export default async function CRMPage() {
                     <div className="flex flex-wrap items-center gap-3">
                       <h2 className="text-xl font-bold">{lead.name}</h2>
 
-                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-                        Score: {lead.score ?? "Not scored"}
-                      </span>
+                      <ScoreBadge score={lead.score} />
 
                       <StageSelect leadId={lead.id} currentStage={lead.stage} />
                     </div>
