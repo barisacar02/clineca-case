@@ -36,7 +36,7 @@ export default async function CRMPage() {
 
   if (error) {
     console.error("CRM load error:", error);
-
+    
     return (
       <main className="min-h-screen bg-slate-50 p-8">
         <div className="mx-auto max-w-6xl rounded-2xl bg-white p-6 shadow-sm">
@@ -48,16 +48,37 @@ export default async function CRMPage() {
   }
 
   const leadList = (leads || []) as CRMLead[];
+  const totalLeads = leadList.length;
+
+const hotLeads = leadList.filter(
+  (lead) => lead.score !== null && lead.score >= 85
+).length;
+
+const deposits = leadList.filter(
+  (lead) => lead.stage === "Deposit"
+).length;
+
+const scoredLeads = leadList.filter(
+  (lead) => lead.score !== null
+);
+
+const averageScore =
+  scoredLeads.length > 0
+    ? Math.round(
+        scoredLeads.reduce((sum, lead) => sum + (lead.score || 0), 0) /
+          scoredLeads.length
+      )
+    : 0;
 
   return (
     <main className="min-h-screen bg-slate-50 p-6 text-slate-900">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-medium text-blue-600">Clineca Mini CRM</p>
-            <h1 className="text-3xl font-bold">Incoming Leads</h1>
+            <p className="text-sm font-medium text-blue-600">Clineca Lead Operations</p>
+            <h1 className="text-3xl font-bold">Clineca Lead Operations</h1>
             <p className="mt-2 text-slate-600">
-              Leads submitted from the rhinoplasty landing page, scored by AI and routed to agents.
+              Track incoming patient inquiries, review AI-generated lead quality, assign ownership, and manage each lead from first contact to deposit.
             </p>
           </div>
 
@@ -67,36 +88,34 @@ export default async function CRMPage() {
           >
             Back to landing page
           </a>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p className="text-sm font-medium text-slate-500">Total Leads</p>
+    <p className="mt-2 text-3xl font-bold text-slate-900">{totalLeads}</p>
+    <p className="mt-1 text-xs text-slate-500">All captured patient inquiries</p>
+  </div>
+
+  <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p className="text-sm font-medium text-slate-500">Hot Leads</p>
+    <p className="mt-2 text-3xl font-bold text-slate-900">{hotLeads}</p>
+    <p className="mt-1 text-xs text-slate-500">AI score of 85 or higher</p>
+  </div>
+
+  <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p className="text-sm font-medium text-slate-500">Deposits</p>
+    <p className="mt-2 text-3xl font-bold text-slate-900">{deposits}</p>
+    <p className="mt-1 text-xs text-slate-500">Leads moved to deposit stage</p>
+  </div>
+
+  <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p className="text-sm font-medium text-slate-500">Average Score</p>
+    <p className="mt-2 text-3xl font-bold text-slate-900">{averageScore}</p>
+    <p className="mt-1 text-xs text-slate-500">Average AI qualification score</p>
+  </div>
+</div>
         </div>
 
-        <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-slate-500">Total leads</p>
-            <p className="mt-2 text-3xl font-bold">{leadList.length}</p>
-          </div>
-
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-slate-500">Lead</p>
-            <p className="mt-2 text-3xl font-bold">
-              {leadList.filter((lead) => lead.stage === "Lead").length}
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-slate-500">Reached</p>
-            <p className="mt-2 text-3xl font-bold">
-              {leadList.filter((lead) => lead.stage === "Reached").length}
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <p className="text-sm text-slate-500">Deposit</p>
-            <p className="mt-2 text-3xl font-bold">
-              {leadList.filter((lead) => lead.stage === "Deposit").length}
-            </p>
-          </div>
-        </div>
-
+        
         <div className="space-y-4">
           {leadList.length === 0 ? (
             <div className="rounded-2xl bg-white p-6 shadow-sm">

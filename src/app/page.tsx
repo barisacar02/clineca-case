@@ -48,41 +48,41 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-2 md:items-center md:py-20">
+      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-12 md:grid-cols-2 md:items-center md:py-14">
         <div>
           <p className="mb-4 inline-block rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
-            Rhinoplasty in Istanbul
+            Premium Medical Travel
           </p>
 
           <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-            Start your nose surgery journey with a trusted clinic team.
+            Plan Your Rhinoplasty Journey in Istanbul
           </h1>
 
           <p className="mt-6 text-lg leading-8 text-slate-600">
-            Get a free consultation for rhinoplasty in Istanbul. Share your details and our patient
-            coordination team will contact you with next steps.
+            Connect with a patient coordination team, receive guidance on treatment options, travel planning,
+  recovery expectations, and the next steps toward your consultation.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-2xl font-bold">24h</p>
-              <p className="text-sm text-slate-500">Fast response</p>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-lg font-bold leading-tight text-slate-900">Personalized Plan</p>
+              <p className="text-sm text-slate-500">Treatment options, travel timing, and next steps reviewed together.</p>
             </div>
-            <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-2xl font-bold">EN/TR</p>
-              <p className="text-sm text-slate-500">Patient support</p>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-lg font-bold leading-tight text-slate-900">International Care</p>
+              <p className="text-sm text-slate-500">Support for patients planning treatment from abroad.</p>
             </div>
-            <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-2xl font-bold">AI</p>
-              <p className="text-sm text-slate-500">Lead qualification</p>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-lg font-bold leading-tight text-slate-900">AI-Prioritized Assistant</p>
+              <p className="text-sm text-slate-500">Your inquiry is reviewed and routed to the right coordinator faster.</p>
             </div>
           </div>
         </div>
 
         <div className="rounded-3xl bg-white p-6 shadow-xl">
-          <h2 className="text-2xl font-bold">Get a free consultation</h2>
+          <h2 className="text-2xl font-bold">Request Your Personalized Consultation Plan</h2>
           <p className="mt-2 text-sm text-slate-500">
-            Fill out the form and our team will contact you.
+            Share your details and our patient coordination team will review your inquiry and contact you with suitable treatment guidance, availability, and next steps.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
