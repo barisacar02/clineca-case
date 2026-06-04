@@ -206,32 +206,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-            <section className="mx-auto max-w-6xl px-6 pb-12">
-        <div className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="font-bold">Demo navigation</h3>
-            <p className="text-sm text-slate-500">
-              Quick links for reviewing the case study flow.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <a
-              href="/crm"
-              className="rounded-xl bg-slate-900 px-5 py-3 text-center font-semibold text-white hover:bg-slate-800"
-            >
-              Open CRM
-            </a>
-
-            <a
-              href="/agents"
-              className="rounded-xl border border-slate-300 px-5 py-3 text-center font-semibold hover:bg-slate-100"
-            >
-              Open Agent View
-            </a>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }
